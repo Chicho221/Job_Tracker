@@ -1,11 +1,16 @@
 from pydantic import BaseModel, Field
+from enum import Enum
 
 # Job Schemas
-class JobBase(BaseModel):
-    
+class JobBase(BaseModel):   
     title: str = Field(min_length=3, max_length=50)
     company: str = Field(min_length=2, max_length=50)
-    status: str  # NEEDS VALIDATION!
+    status: str
+
+class JobStatus(str, Enum):
+    applied = "applied"
+    interview = "interview"
+    rejected = "rejected"
 
 class JobCreate(JobBase):
     pass

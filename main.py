@@ -5,7 +5,7 @@ from database import SessionLocal, init_db
 from typing import List
 from passlib.context import CryptContext
 from models import JobModel, UserModel
-from schemas import JobCreate, Job, UserCreate, User
+from schemas import JobCreate, JobStatus, Job, UserCreate, User
 from jose import jwt, JWTError
 SECRET_KEY = "secret_something"
 
@@ -62,7 +62,8 @@ def get_jobs(current_user: UserModel = Depends(get_current_user), db: Session = 
 # Create Job
 @app.post("/jobs")
 def post_jobs(job: JobCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)): 
-
+    if job.status not in JobStatus:
+        raise HTTPException(status_code=404, detail= "Status does not exist. Please enter (applied/rejected/interview)")
     db_job = JobModel(
         user_id = current_user.id,
         title=job.title,
@@ -92,6 +93,9 @@ def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_curr
     
     if current_user.id != db_job.user_id:
         raise HTTPException(status_code= 403, detail = "Not authorized!")
+    
+    if job.status not in JobStatus:
+        raise HTTPException(status_code=404, detail= "Status does not exist.(applied/rejected/interview)")
     
     db_job.title = job.title
     db_job.company = job.company
