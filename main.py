@@ -61,9 +61,14 @@ def get_jobs(current_user: UserModel = Depends(get_current_user), db: Session = 
 
 # Create Job
 @app.post("/jobs")
-def post_jobs(title: str, company:str, status:str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)): 
+def post_jobs(job: JobCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)): 
 
-    db_job = JobModel(user_id = current_user.id, title=title, company=company, status=status)
+    db_job = JobModel(
+        user_id = current_user.id,
+        title=job.title,
+        company=job.company,
+        status=job.status
+    )
 
     db.add(db_job)
     db.commit()
@@ -81,10 +86,12 @@ def post_jobs(title: str, company:str, status:str, current_user: User = Depends(
 @app.put("/jobs/{id}", response_model=Job)
 def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
-    if current_user.id != db_job.user_id:
-        raise HTTPException(status_code= 404, detail = "Job not found")
+
     if not db_job:
         raise HTTPException(status_code = 404, detail = "Job not found.")
+    
+    if current_user.id != db_job.user_id:
+        raise HTTPException(status_code= 403, detail = "Not authorized!")
     
     db_job.title = job.title
     db_job.company = job.company
@@ -94,14 +101,15 @@ def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_curr
     db.refresh(db_job)
     return db_job
 
-# Deletes entry
+# Deletes Job
 @app.delete("/jobs/{id}", status_code=204)
-def delete_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+def delete_job(id: int, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
-    if current_user.id != db_job.user_id:
-        raise HTTPException(status_code= 404, detail = "Job not found")
     if not db_job:
         raise HTTPException(status_code = 404, detail = "Job not found.")
+    
+    if current_user.id != db_job.user_id:
+        raise HTTPException(status_code= 403, detail = "Not authorized!")
     
     db.delete(db_job)
     db.commit()
@@ -109,17 +117,11 @@ def delete_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_cu
 
 ## User Endpoints
 
-# Show Users
-@app.get("/users", response_model=List[User])
-def get_users(db: Session = Depends(get_db)):
-    users = db.query(UserModel).all()
-    return users
-
 # Create User
 @app.post("/users")
-def create_user(username: str, password: str, db: Session = Depends(get_db)):
-    hashed = pwd_context.hash(password)
-    db_user = UserModel(username = username, password_hash = hashed)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    hashed = pwd_context.hash(user.password)
+    db_user = UserModel(username = user.username, password_hash = hashed)
 
     db.add(db_user)
     db.commit()

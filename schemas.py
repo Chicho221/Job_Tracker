@@ -13,7 +13,7 @@ class JobCreate(JobBase):
 class Job(JobBase):
     id: int
     user_id: int
-    
+
     class Config:
         from_attributes = True
 
@@ -22,7 +22,7 @@ class UserBase(BaseModel):
     username : str
 
 class UserCreate(UserBase):
-    password_hash: str
+    password: str
     pass
     
 class User(UserBase):
