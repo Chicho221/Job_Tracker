@@ -1,0 +1,18 @@
+Job Tracker
+
+What it is?
+
+It's a Job Tracker API with authentication and user-based job management.
+
+Tech stack:
+
+- Python
+- FastAPI
+- SQLAlchemy
+- SQLite
+- JWT
+
+How to run:
+
+'uvicorn main:app --reload'
+
