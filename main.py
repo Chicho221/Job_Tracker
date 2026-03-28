@@ -89,7 +89,7 @@ def get_users(db: Session = Depends(get_db)):
 # Create User
 @app.post("/users")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    hashed = pwd_context.hash(user.password)
+    hashed = pwd_context.hash(user.password_hash)
     db_user = UserModel(username = user.username, password_hash = hashed)
 
     db.add(db_user)
@@ -99,6 +99,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return {
         "id": db_user.id,
         "username": db_user.username,
+        "password": db_user.password_hash ## FOR DEBUG ONLY
     }
 
 # Deletes User
@@ -112,3 +113,20 @@ def delete_user(id: int, user: UserCreate, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
     return None
+
+#Login Endpoint
+
+@app.get("/users/{username}")
+def login(username: str,password: str, db: Session = Depends(get_db)):
+    db_user = db.query(UserModel).filter(UserModel.username == username).first()
+    # Check if username exists in database
+    if not db_user:
+        raise HTTPException(status_code = 404, detail = "User not found.")
+    
+    if not pwd_context.verify(password, db_user.password_hash):
+        raise HTTPException(status_code = 401, detail="Wrong Password")
+    
+    return{
+        "id" : db_user.id,
+        "username" : db_user.username
+    }
