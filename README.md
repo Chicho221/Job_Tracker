@@ -14,5 +14,5 @@ Tech stack:
 
 How to run:
 
-<pre> ``` uvicorn main:app --reload ``` </pre>
+`uvicorn main:app --reload`
 
