@@ -16,3 +16,4 @@ How to run:
 
 `uvicorn main:app --reload`
 
+<img width="1547" height="764" alt="image" src="https://github.com/user-attachments/assets/bf455106-e948-4730-9278-5555818b98a4" />
