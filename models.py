@@ -1,7 +1,7 @@
 from database import Base
 from sqlalchemy import Column, Integer, String
 
-class Job(Base):
+class JobModel(Base):
     __tablename__ = 'jobs'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -11,3 +11,9 @@ class Job(Base):
 
     def __repr__(self):
         return f"Job(id={self.id}, title={self.title}, company={self.company}, status={self.status})"
+    
+class UserModel(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True)
+    password_hash = Column(String)
