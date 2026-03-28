@@ -56,14 +56,14 @@ def get_current_user(token : str = Depends(oauth2_scheme), db: Session = Depends
 # Display Jobs
 @app.get("/jobs", response_model=List[Job])
 def get_jobs(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
-    jobs = db.query(JobModel).all()
+    jobs = db.query(JobModel).filter(JobModel.user_id == current_user.id).all()
     return jobs
 
 # Create Job
 @app.post("/jobs")
-def post_jobs(title: str, company:str, status:str, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)): 
+def post_jobs(title: str, company:str, status:str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)): 
 
-    db_job = JobModel(title=title, company=company, status=status)
+    db_job = JobModel(user_id = current_user.id, title=title, company=company, status=status)
 
     db.add(db_job)
     db.commit()
@@ -71,16 +71,18 @@ def post_jobs(title: str, company:str, status:str, current_user: UserModel = Dep
     
     return {
         "id": db_job.id,
+        "user_id": db_job.user_id,
         "title": db_job.title,
         "company": db_job.company,
         "status": db_job.status,
     }
 
-# Edits entry
+# Edits Job
 @app.put("/jobs/{id}", response_model=Job)
 def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
-
+    if current_user.id != db_job.user_id:
+        raise HTTPException(status_code= 404, detail = "Job not found")
     if not db_job:
         raise HTTPException(status_code = 404, detail = "Job not found.")
     
@@ -96,7 +98,8 @@ def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_curr
 @app.delete("/jobs/{id}", status_code=204)
 def delete_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
-
+    if current_user.id != db_job.user_id:
+        raise HTTPException(status_code= 404, detail = "Job not found")
     if not db_job:
         raise HTTPException(status_code = 404, detail = "Job not found.")
     
