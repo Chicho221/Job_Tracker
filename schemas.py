@@ -12,17 +12,18 @@ class JobCreate(JobBase):
 class Job(JobBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # User Schemas
 class UserBase(BaseModel):
     username : str
 
 class UserCreate(UserBase):
+    password_hash: str
     pass
-
+    
 class User(UserBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

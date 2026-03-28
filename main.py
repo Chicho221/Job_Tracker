@@ -1,14 +1,21 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import SessionLocal, init_db
 from typing import List
 from passlib.context import CryptContext
 from models import JobModel, UserModel
 from schemas import JobCreate, Job, UserCreate, User
-
+from jose import jwt, JWTError
+SECRET_KEY = "secret_something"
 
 app = FastAPI()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+## JWT TOKEN CREATION
+def create_access_token(data: dict):
+    return jwt.encode(data, SECRET_KEY, algorithm="HS256")
 
 @app.on_event("startup")
 def on_startup():
@@ -25,19 +32,38 @@ def get_db():
 def home():
     return {'message': 'Job Tracker API is running..'}
 
+def get_current_user(token : str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        ## JWT TOKEN VERIFICATION
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        username: str = payload.get("sub")
+
+        if username is None:
+            raise HTTPException(status_code=401, detail = "Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=401, detail = "Invalid token")
+    
+    user = db.query(UserModel).filter(UserModel.username == username).first()
+
+    if user is None:
+        raise HTTPException(status_code=404, detail = "User not found")
+    
+    return user
+
+
 ## Job Endpoints
 
-# Pulls all enties from database
+# Display Jobs
 @app.get("/jobs", response_model=List[Job])
-def get_jobs(db: Session = Depends(get_db)):
+def get_jobs(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     jobs = db.query(JobModel).all()
     return jobs
 
-# Pushes entry into the database
+# Create Job
 @app.post("/jobs")
-def post_jobs(job: JobCreate, db: Session = Depends(get_db)): 
+def post_jobs(title: str, company:str, status:str, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)): 
 
-    db_job = JobModel(title=job.title, company=job.company, status=job.status)
+    db_job = JobModel(title=title, company=company, status=status)
 
     db.add(db_job)
     db.commit()
@@ -52,7 +78,7 @@ def post_jobs(job: JobCreate, db: Session = Depends(get_db)):
 
 # Edits entry
 @app.put("/jobs/{id}", response_model=Job)
-def edit_job(id: int, job: JobCreate, db: Session = Depends(get_db)):
+def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
 
     if not db_job:
@@ -68,7 +94,7 @@ def edit_job(id: int, job: JobCreate, db: Session = Depends(get_db)):
 
 # Deletes entry
 @app.delete("/jobs/{id}", status_code=204)
-def delete_job(id: int, job: JobCreate, db: Session = Depends(get_db)):
+def delete_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = db.query(JobModel).filter(JobModel.id == id).first()
 
     if not db_job:
@@ -88,9 +114,9 @@ def get_users(db: Session = Depends(get_db)):
 
 # Create User
 @app.post("/users")
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    hashed = pwd_context.hash(user.password_hash)
-    db_user = UserModel(username = user.username, password_hash = hashed)
+def create_user(username: str, password: str, db: Session = Depends(get_db)):
+    hashed = pwd_context.hash(password)
+    db_user = UserModel(username = username, password_hash = hashed)
 
     db.add(db_user)
     db.commit()
@@ -99,12 +125,11 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return {
         "id": db_user.id,
         "username": db_user.username,
-        "password": db_user.password_hash ## FOR DEBUG ONLY
     }
 
 # Deletes User
 @app.delete("/users/{id}", status_code=204)
-def delete_user(id: int, user: UserCreate, db: Session = Depends(get_db)):
+def delete_user(id: int, db: Session = Depends(get_db)):
     db_user = db.query(UserModel).filter(UserModel.id == id).first()
 
     if not db_user:
@@ -116,17 +141,19 @@ def delete_user(id: int, user: UserCreate, db: Session = Depends(get_db)):
 
 #Login Endpoint
 
-@app.get("/users/{username}")
-def login(username: str,password: str, db: Session = Depends(get_db)):
-    db_user = db.query(UserModel).filter(UserModel.username == username).first()
+@app.post("/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    db_user = db.query(UserModel).filter(UserModel.username == form_data.username).first()
+
     # Check if username exists in database
     if not db_user:
         raise HTTPException(status_code = 404, detail = "User not found.")
     
-    if not pwd_context.verify(password, db_user.password_hash):
+    # Verify password
+    if not pwd_context.verify(form_data.password, db_user.password_hash):
         raise HTTPException(status_code = 401, detail="Wrong Password")
-    
-    return{
-        "id" : db_user.id,
-        "username" : db_user.username
+    access_token = create_access_token(data = {"sub": db_user.username})
+    return {
+        "access_token" : access_token,
+        "token_type" : "bearer"
     }
