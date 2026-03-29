@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from database import SessionLocal, init_db
 from typing import List
 from passlib.context import CryptContext
@@ -56,7 +57,26 @@ def get_current_user(token : str = Depends(oauth2_scheme), db: Session = Depends
 # Display Jobs
 @app.get("/jobs", response_model=List[Job])
 def get_jobs(skip: int = 0, limit: int = 10, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+    limit = min(limit, 50)
     jobs = db.query(JobModel).filter(JobModel.user_id == current_user.id).offset(skip).limit(limit).all()
+    return jobs
+
+# Search Job
+@app.get("/jobs/search/", response_model = List[Job])
+def search_jobs(search: str | None = None, skip: int = 0, limit: int = 10, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+    limit = min(limit, 50)
+
+    query = db.query(JobModel).filter(JobModel.user_id == current_user.id)
+    
+    if search:
+        query = query.filter(
+            or_(
+                JobModel.company.ilike(f"%{search}%"),
+                JobModel.status.ilike(f"%{search}%")
+            )
+        )
+    jobs = query.offset(skip).limit(limit).all()
+                                    
     return jobs
 
 # Create Job
