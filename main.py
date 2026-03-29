@@ -81,27 +81,19 @@ def search_jobs(search: str | None = None, skip: int = 0, limit: int = 10, curre
 
 # Create Job
 @app.post("/jobs")
-def post_jobs(job: JobCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)): 
-    if job.status not in JobStatus:
-        raise HTTPException(status_code=404, detail= "Status does not exist. Please enter (applied/rejected/interview)")
+def post_jobs(job: JobCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     db_job = JobModel(
         user_id = current_user.id,
         title=job.title,
         company=job.company,
-        status=job.status
+        status=job.status,
     )
 
     db.add(db_job)
     db.commit()
     db.refresh(db_job)
     
-    return {
-        "id": db_job.id,
-        "user_id": db_job.user_id,
-        "title": db_job.title,
-        "company": db_job.company,
-        "status": db_job.status,
-    }
+    return db_job
 
 # Edits Job
 @app.put("/jobs/{id}", response_model=Job)
@@ -113,9 +105,6 @@ def edit_job(id: int, job: JobCreate, current_user: UserModel = Depends(get_curr
     
     if current_user.id != db_job.user_id:
         raise HTTPException(status_code= 403, detail = "Not authorized!")
-    
-    if job.status not in JobStatus:
-        raise HTTPException(status_code=404, detail= "Status does not exist.(applied/rejected/interview)")
     
     db_job.title = job.title
     db_job.company = job.company

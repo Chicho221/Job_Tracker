@@ -1,16 +1,18 @@
 from pydantic import BaseModel, Field
 from enum import Enum
+from datetime import datetime
 
-# Job Schemas
-class JobBase(BaseModel):   
-    title: str = Field(min_length=3, max_length=50)
-    company: str = Field(min_length=2, max_length=50)
-    status: str
+## Job Schemas
 
 class JobStatus(str, Enum):
     applied = "applied"
     interview = "interview"
     rejected = "rejected"
+
+class JobBase(BaseModel):   
+    title: str = Field(min_length=3, max_length=50)
+    company: str = Field(min_length=2, max_length=50)
+    status: JobStatus
 
 class JobCreate(JobBase):
     pass
@@ -18,9 +20,14 @@ class JobCreate(JobBase):
 class Job(JobBase):
     id: int
     user_id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
+        json_encoders= {
+            datetime: lambda v: v.strftime("%Y-%m-%d %H:%M")
+        }
 
 # User Schemas
 class UserBase(BaseModel):

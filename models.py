@@ -1,5 +1,6 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from datetime import datetime, timezone
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 
 class JobModel(Base):
     __tablename__ = 'jobs'
@@ -9,6 +10,8 @@ class JobModel(Base):
     title = Column(String, index=True)
     company = Column(String, index=True)
     status = Column(String, index=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
         return f"Job(id={self.id}, title={self.title}, company={self.company}, status={self.status})"
