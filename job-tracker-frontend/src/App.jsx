@@ -102,7 +102,7 @@ function App() {
       }
   }
 return (
-  
+
 <div>
   <h2>Login</h2>
 
@@ -127,7 +127,16 @@ return (
       <ul>
         {jobs.map((job) => (
           <li key = {job.id}>
-            {job.title} - {job.company} - {job.status} <button onClick={() => startEdit(job)}>Edit</button> <button onClick={() => deleteJob(job.id)}>Delete</button>
+            {job.title} - {job.company} - {job.status} 
+            <button onClick={() => startEdit(job)}>Edit</button> 
+            {editingId && (<button onClick={() => { setEditingId(null)
+                                                    setTitle("")
+                                                    setCompany("")
+                                                    setStatus("")
+                                                  }}>Cancel
+            </button>
+        )}
+            <button onClick={() => deleteJob(job.id)}>Delete</button>
           </li>
         ))}
       </ul>
