@@ -6,7 +6,7 @@ from database import SessionLocal, init_db
 from typing import List
 from passlib.context import CryptContext
 from models import JobModel, UserModel
-from schemas import JobCreate, JobStatus, Job, UserCreate, User
+from schemas import JobCreate, JobStatus, Job, UserCreate, User, PaginatedJobs
 from jose import jwt, JWTError
 from fastapi.middleware.cors import CORSMiddleware
 SECRET_KEY = "secret_something"
@@ -65,8 +65,8 @@ def get_current_user(token : str = Depends(oauth2_scheme), db: Session = Depends
 ## Job Endpoints
 
 # Search/Get Job
-@app.get("/jobs", response_model = List[Job])
-def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: int = 10, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+@app.get("/jobs", response_model = PaginatedJobs)
+def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: int = 5, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     limit = min(limit, 50)
 
     query = db.query(JobModel).filter(JobModel.user_id == current_user.id)
@@ -82,9 +82,10 @@ def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: in
                 JobModel.status.ilike(f"%{search}%")
             )
         )
+    total = query.count()   
     jobs = query.offset(skip).limit(limit).all()
-                                    
-    return jobs
+                                 
+    return {"total": total, "jobs": jobs}
 
 # Create Job
 @app.post("/jobs")
