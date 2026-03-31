@@ -10,13 +10,18 @@ function App() {
   const [password, setPassword] = useState("")
   const [token, setToken] = useState("")
   const [editingId, setEditingId] = useState(null)
+  const [search, setSearch] = useState("")
+  const [searchstatus, setSearchStatus] = useState("")
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token")
     if (savedToken) {
       setToken(savedToken)
     }
-  },[])
+    if (token) {
+      fetchJobs()
+    }
+  },[search,searchstatus])
 
   //Login function
   const login = async () => {
@@ -35,9 +40,9 @@ function App() {
     localStorage.setItem("token", data.access_token)
   }
 
-  //Get all jobs function
+  //Get all/search jobs function
   const fetchJobs = async () => {
-    const response = await fetch("http://127.0.0.1:8000/jobs", {
+    const response = await fetch(`http://127.0.0.1:8000/jobs?search=${search}&status=${searchstatus}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -124,6 +129,17 @@ return (
       </select>
 
       <button onClick={addOrUpdateJob}>Create</button>
+
+    <h2>Search</h2>
+      <input placeholder="Search by: Title, Company" value={search} onChange={(e) => setSearch(e.target.value)}/>
+      <button onClick={() => {fetchJobs();setSearch("");}}>Search</button>
+      <select value = {searchstatus} onChange = {(e) => setSearchStatus(e.target.value)}>
+        <option value="" default>All</option>
+        <option value="applied">Applied</option>
+        <option value="rejected">Rejected</option>
+        <option value="interview">Interview</option>
+      </select>
+      
       <ul>
         {jobs.map((job) => (
           <li key = {job.id}>
@@ -132,7 +148,7 @@ return (
             <button onClick={() => startEdit(job)}>Edit</button>
 
             {editingId && (<button onClick={() => { setEditingId(null), setTitle(""), setCompany(""), setStatus("")}}>Cancel</button>)}
-            
+
             <button onClick={() => deleteJob(job.id)}>Delete</button>
           </li>
         ))}
