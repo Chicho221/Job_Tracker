@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from enum import Enum
 from datetime import datetime
+from typing import List
 
 ## Job Schemas
 
@@ -28,6 +29,10 @@ class Job(JobBase):
         json_encoders= {
             datetime: lambda v: v.strftime("%Y-%m-%d %H:%M")
         }
+
+class PaginatedJobs(BaseModel):
+    total: int
+    jobs: List[Job]
 
 # User Schemas
 class UserBase(BaseModel):
