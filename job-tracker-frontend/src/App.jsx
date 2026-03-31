@@ -128,14 +128,11 @@ return (
         {jobs.map((job) => (
           <li key = {job.id}>
             {job.title} - {job.company} - {job.status} 
-            <button onClick={() => startEdit(job)}>Edit</button> 
-            {editingId && (<button onClick={() => { setEditingId(null)
-                                                    setTitle("")
-                                                    setCompany("")
-                                                    setStatus("")
-                                                  }}>Cancel
-            </button>
-        )}
+
+            <button onClick={() => startEdit(job)}>Edit</button>
+
+            {editingId && (<button onClick={() => { setEditingId(null), setTitle(""), setCompany(""), setStatus("")}}>Cancel</button>)}
+            
             <button onClick={() => deleteJob(job.id)}>Delete</button>
           </li>
         ))}
