@@ -8,9 +8,19 @@ from passlib.context import CryptContext
 from models import JobModel, UserModel
 from schemas import JobCreate, JobStatus, Job, UserCreate, User
 from jose import jwt, JWTError
+from fastapi.middleware.cors import CORSMiddleware
 SECRET_KEY = "secret_something"
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all (for now)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
