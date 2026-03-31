@@ -9,6 +9,7 @@ function App() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [token, setToken] = useState("")
+  const [editingId, setEditingId] = useState(null)
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token")
@@ -17,6 +18,7 @@ function App() {
     }
   },[])
 
+  //Login function
   const login = async () => {
     const formData = new URLSearchParams()
     formData.append("username", username)
@@ -33,6 +35,7 @@ function App() {
     localStorage.setItem("token", data.access_token)
   }
 
+  //Get all jobs function
   const fetchJobs = async () => {
     const response = await fetch("http://127.0.0.1:8000/jobs", {
       headers: {
@@ -45,9 +48,16 @@ function App() {
     }
   }
 
-  const addJob = async () => {
-    const response = await fetch("http://127.0.0.1:8000/jobs", {
-      method: "POST",
+  //Add new or update job function
+  const addOrUpdateJob = async () => {
+    const url = editingId
+      ? `http://127.0.0.1:8000/jobs/${editingId}`
+      : "http://127.0.0.1:8000/jobs"
+
+    const method = editingId ? "PUT" : "POST"
+
+    const response = await fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
@@ -60,12 +70,21 @@ function App() {
     })
 
     if (response.ok) {
-      setCompany("")
       setTitle("")
+      setCompany("")
+      setEditingId(null)
       fetchJobs()
     }
   }
 
+  const startEdit = (job) => {
+    setTitle(job.title)
+    setCompany(job.company)
+    setStatus(job.status)
+    setEditingId(job.id)
+  }
+  
+  //Delete function
   const deleteJob = async(id) => {
     const response = await fetch(`http://127.0.0.1:8000/jobs/${id}`, {
       method: "DELETE",
@@ -81,21 +100,9 @@ function App() {
       if (response.ok){
         fetchJobs()
       }
-
   }
-
-  const editJob = async(id) => {
-    const response = await fetch(`http://127.0.0.1:8000/jobs/${id}`, {
-      method: "POST",
-      header: {
-        Authorization: `Bearer ${token}`
-      }
-  })
-    if (response.ok){
-      fetchJobs()
-    }
-}
-  return (
+return (
+  
 <div>
   <h2>Login</h2>
 
@@ -116,11 +123,11 @@ function App() {
         <option value="interview">Interview</option>
       </select>
 
-      <button onClick={addJob}>Create</button>
+      <button onClick={addOrUpdateJob}>Create</button>
       <ul>
         {jobs.map((job) => (
           <li key = {job.id}>
-            {job.title} - {job.company} - {job.status} <button onClick={() => deleteJob(job.id)}>Delete</button>
+            {job.title} - {job.company} - {job.status} <button onClick={() => startEdit(job)}>Edit</button> <button onClick={() => deleteJob(job.id)}>Delete</button>
           </li>
         ))}
       </ul>
