@@ -1,9 +1,11 @@
 import {use, useState} from "react"
 import {useEffect} from "react"
+
 import JobList from "./components/JobList"
 import Pagination from "./components/Pagination"
 import SideBar from "./components/Sidebar"
 import JobForm from "./components/JobForm"
+import SearchBar from "./components/SearchBar"
 
 
 function App() {
@@ -192,20 +194,25 @@ return (
   />
 
   <div className="w-full flex flex-col">
+    <div className="w-full flex flex-row items-end">
+      <JobForm
+      title={title}
+      setTitle={setTitle}
+      company={company}
+      setCompany={setCompany}
+      status={status}
+      setStatus={setStatus}
+      editingId={editingId}
+      addOrUpdateJob={addOrUpdateJob}
+      />
 
-    <JobForm
-    title={title}
-    setTitle={setTitle}
-    company={company}
-    setCompany={setCompany}
-    search={search}
-    searchstatus={searchstatus}
-    status={status}
-    setStatus={setStatus}
-    editingId={editingId}
-    addOrUpdateJob={addOrUpdateJob}
-    />
-
+      <SearchBar
+      search={search}
+      searchstatus={searchstatus}
+      setSearch={setSearch}
+      setSearchStatus={setSearchStatus}
+      />
+    </div>
     <div className="w-full">
       <Pagination
         token={token}
