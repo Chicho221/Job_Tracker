@@ -7,7 +7,6 @@ import SideBar from "./components/Sidebar"
 import JobForm from "./components/JobForm"
 import SearchBar from "./components/SearchBar"
 
-
 function App() {
   const [jobs, setJobs] = useState([])
   const [title, setTitle] = useState("")
@@ -193,8 +192,9 @@ return (
     setTotal={setToken}
   />
 
-  <div className="w-full flex flex-col">
-    <div className="w-full flex flex-row items-end">
+  <div className="w-full flex flex-col gap-4">
+    <div className="h-1/3 flex bg-zinc-900">
+
       <JobForm
       title={title}
       setTitle={setTitle}
@@ -212,8 +212,10 @@ return (
       setSearch={setSearch}
       setSearchStatus={setSearchStatus}
       />
+
     </div>
     <div className="w-full">
+
       <Pagination
         token={token}
         page={page}
