@@ -3,9 +3,9 @@ function Pagination({ token, page, total, limit, setPage }) {
     if(!token) {
         return(
         <div className="flex justify-center items-center mt-4 mb-2">
-          <button className="bg-blue-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Prev</button>
-          <span className="hover:cursor-default text-sm mx-2">Page 0 of 0</span>
-          <button className="bg-blue-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Next</button>
+          
+          <span className="hover:cursor-default text-sm mx-2 italic">No jobs added yet :(</span>
+          
         </div>
         )
     }

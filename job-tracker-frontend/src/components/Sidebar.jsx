@@ -17,14 +17,15 @@ function SideBar({password, login, setPassword, token, username, setToken, setUs
     if(!token){
         return(
             <div className="w-1/6 h-screen min-w-60 pt-6 bg-zinc-900 flex flex-col">
-                <div className="w-full min-h-[20rem] flex flex-col justify-center">
-                <h2 className="text-2xl font-bold mb-4 font-mono">Login</h2>
+                <div className="max-w-40 min-h-[20rem] mx-auto rounded-full object-fill flex flex-col justify-center gap-2">
+                    <h2 className="text-2xl font-bold mb-4 font-mono">Login</h2>
 
-                <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                
-                <button className="bg-white/5 p-2 mt-2 w-full hover:bg-white/5" onClick={() => {login(),
-                                                                                                    setPassword("")}}>Login</button>
+                    <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    
+                    <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
+                    hover:bg-white hover:text-blue-700" onClick={() => {login(),
+                                                                                                        setPassword("")}}>Login</button>
                 </div>
             </div>
 
