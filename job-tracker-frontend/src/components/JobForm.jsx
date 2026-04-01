@@ -21,8 +21,8 @@ return(
             </div>
                 
             <div className="flex pr-4 border-r-2">
-                {editingId &&(<button className=" px-6 py-2 rounded bg-zinc-800 hover:bg-white/5 active:bg-orange-700" onClick={addOrUpdateJob}>Update Job</button>)}
-                {!editingId &&(<button className=" px-6 py-2 rounded bg-zinc-800 hover:bg-white/5 active:bg-orange-700" onClick={addOrUpdateJob}>Create Job</button>)}
+                {editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white/5 hover:bg-white" onClick={addOrUpdateJob}>Update Job</button>)}
+                {!editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white hover:text-blue-700" onClick={addOrUpdateJob}>Create Job</button>)}
             </div>
 
         </div>

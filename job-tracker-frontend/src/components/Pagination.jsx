@@ -3,23 +3,23 @@ function Pagination({ token, page, total, limit, setPage }) {
     if(!token) {
         return(
         <div className="flex justify-center items-center mt-4 mb-2">
-          <button className="bg-orange-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Prev</button>
+          <button className="bg-blue-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Prev</button>
           <span className="hover:cursor-default text-sm mx-2">Page 0 of 0</span>
-          <button className="bg-orange-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Next</button>
+          <button className="bg-blue-700 px-3 py-1 rounded disabled:bg-white/5" disabled>Next</button>
         </div>
         )
     }
     return(
         <div className="flex justify-center items-center mt-4 mb-2">
           <button 
-            className="bg-orange-700 px-3 py-1 rounded disabled:bg-white/5" 
+            className="transition duration-300 ease-in-out bg-blue-700 px-3 py-1 rounded hover:bg-white hover:text-blue-700 disabled:bg-white/5 disabled:text-white" 
             onClick={() => setPage(prev => Math.max(prev-1, 1))} 
             disabled={page === 1}>
                 Prev</button>
 
           <span className="hover:cursor-default text-sm mx-2">Page {page} of {totalPages}</span>
           <button 
-            className="bg-orange-700 px-3 py-1 rounded disabled:bg-white/5"
+            className="transition duration-300 ease-in-out bg-blue-700 px-3 py-1 rounded hover:bg-white hover:text-blue-700 disabled:bg-white/5 disabled:text-white"
             onClick={() => setPage(prev => Math.min(prev + 1, totalPages))} 
             disabled={page === totalPages}
             >Next</button>

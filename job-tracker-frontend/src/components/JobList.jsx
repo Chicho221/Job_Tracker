@@ -3,7 +3,7 @@ function JobList({ jobs, editingId, startEdit, deleteJob, setEditingId, setTitle
         <ul className="m-4 grid gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {jobs.map((job) => (
             
-            <li key = {job.id} className="bg-zinc-900 rounded p-4 hover:bg-white/10">
+            <li key = {job.id} className="transition duration-300 hover:scale-105 bg-zinc-900 rounded p-4 hover:bg-white/10">
 
               <div className="flex justify-between items-center">
                 <div className="w-2/3 flex flex-col items-start overflow-hidden">
