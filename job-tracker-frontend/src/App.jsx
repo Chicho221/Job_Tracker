@@ -22,6 +22,12 @@ function App() {
   const [searchstatus, setSearchStatus] = useState("")
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
+  const [stats, setStats] = useState({
+    total: 0,
+    applied: 0,
+    interview: 0,
+    rejected: 0
+  })
 
   //Get user width and set limit for jobs display
   const getLimit = () => {
@@ -61,6 +67,7 @@ function App() {
   useEffect(() => {
     if (token) {
       fetchJobs()
+      fetchStats()
     }
   }, [token, page, limit, search, searchstatus])
 
@@ -100,6 +107,7 @@ function App() {
     localStorage.setItem("username", username)
     }
   }
+
   //Create new user
   const createUser = async () => {
     if (!newusername || !newpassword) {
@@ -116,15 +124,16 @@ function App() {
         password: newpassword
       })
     })
+
     if (!response.ok) {
-  const errorData = await response.json()
-  if(Array.isArray(errorData.detail)) {
-    alert(errorData.detail.map(e => e.msg).join(", "))
-  }else {
-  alert(errorData.detail || "Registration failed!")
-  }
-  return
-}
+      const errorData = await response.json()
+      if(Array.isArray(errorData.detail)) {
+        alert(errorData.detail.map(e => e.msg).join(", "))
+      }else {
+        alert(errorData.detail || "Registration failed!")
+      }
+      return
+    }
 
     alert("User created!")
   }
@@ -204,7 +213,22 @@ function App() {
         alert("Job removed successfully.")
       }
   }
-  
+
+  //Fetch stats function
+  const fetchStats = async() => {
+    const response = await fetch("http://127.0.0.1:8000/jobs/stats", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+      if (!response.ok) {
+        alert("Stats Fetch Failed!")
+        return
+      }
+    const data = await response.json()
+    setStats(data)
+  }
 return (
 
 <div className="overflow-hidden w-full max-h-screen bg-zinc-950 text-white flex flex-row font-mono">
