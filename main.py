@@ -187,3 +187,20 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         "access_token" : access_token,
         "token_type" : "bearer"
     }
+
+#Job Stats Endpoint
+@app.get("/jobs/stats")
+def get_stats(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+    jobs = db.query(JobModel).filter(JobModel.user_id == current_user.id).all()
+
+    total = len(jobs)
+    applied = len([j for j in jobs if j.status == "applied"])
+    interview = len([j for j in jobs if j.status == "interview"])
+    rejected = len([j for j in jobs if j.status == "rejected"])
+
+    return {
+        "total": total,
+        "applied": applied,
+        "interview": interview,
+        "rejected": rejected
+    }
