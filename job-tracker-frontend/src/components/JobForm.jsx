@@ -1,13 +1,13 @@
 function JobForm({title, setTitle, company, setCompany, status, setStatus, editingId, addOrUpdateJob}){
 return(
 
-    <div className="w-1/3 min-w-fit flex flex-col justify-end">
+    <div className="mb-4 w-1/3 min-w-fit flex flex-col justify-end">
 
         <div className="">
         <h1 className="mr-auto bg-zinc-900 py-6 pl-6 pr-24 text-start font-mono">Job Tracker</h1>
         </div>
 
-        <div className="flex w-full mb-4">
+        <div className="flex w-full">
 
             <div className="flex flex-col w-full ml-4 mr-2">
                 <input className="p-2 rounded bg-zinc-800 focus:bg-white/5 focus:outline-none" type="text"  placeholder = "Job Title" value = {title} onChange = {(e) => setTitle(e.target.value)}/>
