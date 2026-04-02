@@ -1,23 +1,23 @@
+import { BarChart, Legend, XAxis, YAxis, CartesianGrid, Tooltip, Bar } from "recharts"
+
 function Dashboard ({stats}) {
-    console.log(stats)
+    const data = [
+        {name: "Total", value: stats.total, fill:"oklch(48.8% 0.243 264.376)"},
+        {name: "Applied", value: stats.applied, fill:"oklch(48.8% 0.243 264.376)"},
+        {name: "Interview",value: stats.interview, fill:"oklch(48.8% 0.243 264.376)"},
+        {name: "Rejected",value: stats.rejected, fill:"oklch(48.8% 0.243 264.376)"}
+    ]
+    console.log(data)
     return(
         <div className="h-3/4 mb-4 mr-4 flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
-            <div className="bg-zinc-900 p-4 rounded">
-                <p>Total</p>
-                <h2>{stats.total}</h2>
-            </div>
-            <div className="bg-zinc-900 p-4 rounded">
-                <p>Applied</p>
-                <h2>{stats.applied}</h2>
-            </div>
-            <div className="bg-zinc-900 p-4 rounded">
-                <p>Interview</p>
-                <h2>{stats.interview}</h2>
-            </div>
-            <div className="bg-zinc-900 p-4 rounded">
-                <p>Rejected</p>
-                <h2>{stats.rejected}</h2>
-            </div>
+            
+            <BarChart style={{ width: "100%"}} responsive data={data}>
+                <XAxis dataKey="name" />
+                <YAxis width="auto" />
+                <Tooltip />
+                <Bar dataKey="value" radius={[6,6,0,0]}/>
+            </BarChart> 
+
         </div>
     )
 }

@@ -53,6 +53,7 @@ function App() {
       setJobs([])
       setTotal(0)
       setPage(1)
+      setStats(0,0,0,0)
     }
   }, [token])
 
