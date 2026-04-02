@@ -1,4 +1,4 @@
-import { BarChart, Legend, XAxis, YAxis, CartesianGrid, Tooltip, Bar } from "recharts"
+import { BarChart, XAxis, YAxis, Tooltip, Bar, LabelList } from "recharts"
 
 function Dashboard ({stats}) {
     const data = [
@@ -9,13 +9,15 @@ function Dashboard ({stats}) {
     ]
     console.log(data)
     return(
-        <div className="h-3/4 mb-4 mr-4 flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
+        <div className="h-3/4 mr-4 flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
             
-            <BarChart style={{ width: "100%"}} responsive data={data}>
+            <BarChart style={{ width: "100%", hover:"none"}} responsive data={data}>
                 <XAxis dataKey="name" />
                 <YAxis width="auto" />
                 <Tooltip />
-                <Bar dataKey="value" radius={[6,6,0,0]}/>
+                <Bar dataKey="value" radius={[6,6,0,0]}>
+                    <LabelList dataKey="value" position="top" fill="white"/>
+                </Bar>
             </BarChart> 
 
         </div>
