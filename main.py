@@ -141,9 +141,13 @@ def delete_job(id: int, current_user: UserModel = Depends(get_current_user), db:
 # Create User
 @app.post("/users")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    existingUser = db.query(UserModel).filter(UserModel.username == user.username).first()
+    if existingUser:
+        raise HTTPException(status_code=400, detail="Username already exists!")
     hashed = pwd_context.hash(user.password)
     db_user = UserModel(username = user.username, password_hash = hashed)
-
+    
+        
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

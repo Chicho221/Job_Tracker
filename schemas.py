@@ -36,10 +36,10 @@ class PaginatedJobs(BaseModel):
 
 # User Schemas
 class UserBase(BaseModel):
-    username : str
+    username : str = Field(min_length=3, max_length=50)
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(min_length=3, max_length=100)
     pass
     
 class User(UserBase):

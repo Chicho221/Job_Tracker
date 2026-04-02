@@ -12,6 +12,8 @@ function App() {
   const [title, setTitle] = useState("")
   const [company, setCompany] = useState("")
   const [status, setStatus] = useState("applied")
+  const [newusername, setNewusername] = useState("")
+  const [newpassword, setNewpassword] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [token, setToken] = useState("")
@@ -98,6 +100,34 @@ function App() {
     localStorage.setItem("username", username)
     }
   }
+  //Create new user
+  const createUser = async () => {
+    if (!newusername || !newpassword) {
+    alert("Username and password are required!")
+    return
+    }
+    const response = await fetch("http://127.0.0.1:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: newusername,
+        password: newpassword
+      })
+    })
+    if (!response.ok) {
+  const errorData = await response.json()
+  if(Array.isArray(errorData.detail)) {
+    alert(errorData.detail.map(e => e.msg).join(", "))
+  }else {
+  alert(errorData.detail || "Registration failed!")
+  }
+  return
+}
+
+    alert("User created!")
+  }
 
   //Get all/search jobs function
   const fetchJobs = async () => {
@@ -181,15 +211,20 @@ return (
   
   <SideBar
     token={token}
+    setToken={setToken}
+    createUser={createUser}
     login={login}
     password={password}
+    newpassword={newpassword}
     username={username}
-    setToken={setToken}
+    newusername={newusername}
+    setNewusername={setNewusername}
+    setNewpassword={setNewpassword}
     setUsername={setUsername}
     setPassword={setPassword}
     setJobs={setJobs}
     setPage={setPage}
-    setTotal={setToken}
+    setTotal={setTotal}
   />
 
   <div className="w-full flex flex-col gap-4">

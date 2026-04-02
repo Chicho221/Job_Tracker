@@ -1,7 +1,7 @@
   
 import profile from "../assets/profile.jpg"
 
-function SideBar({password, login, setPassword, token, username, setToken, setUsername, setJobs, setPage, setTotal }) {
+function SideBar({password, login, setPassword,setNewpassword, newpassword, createUser, token, username, setUsername, setNewusername, newusername, setToken, setJobs, setPage, setTotal }) {
 
     const logout = () => {
         localStorage.removeItem("token")
@@ -13,7 +13,6 @@ function SideBar({password, login, setPassword, token, username, setToken, setUs
         setPage(1)
         setTotal(0)
     }
-
     if(!token){
         return(
             <div className="w-1/6 h-screen min-w-60 pt-6 bg-zinc-900 flex flex-col">
@@ -26,11 +25,18 @@ function SideBar({password, login, setPassword, token, username, setToken, setUs
                     <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
                     hover:bg-white hover:text-blue-700" onClick={() => {login(),
                                                                                                         setPassword("")}}>Login</button>
+                    
+                    <h2 className="text-2xl font-bold mb-4 font-mono">Register</h2>
+                    <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Username" value={newusername} onChange={(e) => setNewusername(e.target.value)} />
+                    <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Password" value={newpassword} onChange={(e) => setNewpassword(e.target.value)} />
+                    <h4 className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
+                    hover:bg-white hover:text-blue-700" onClick={createUser}>Register</h4>
                 </div>
             </div>
-
+            
         )
     }
+    
     return(
         <div className="w-1/6 h-screen min-w-60 pt-6 bg-zinc-800 flex flex-col">
             <div className= "max-w-40 min-h-[20rem] mx-auto rounded-full object-fill flex flex-col justify-evenly">
