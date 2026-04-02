@@ -6,6 +6,7 @@ import Pagination from "./components/Pagination"
 import SideBar from "./components/Sidebar"
 import JobForm from "./components/JobForm"
 import SearchBar from "./components/SearchBar"
+import Dashboard from "./components/Dashboard"
 
 function App() {
   const [jobs, setJobs] = useState([])
@@ -252,7 +253,7 @@ return (
   />
 
   <div className="w-full flex flex-col gap-4">
-    <div className="h-1/3 flex bg-zinc-900">
+    <div className="h-1/3 flex flex-row items-end bg-zinc-900">
 
       <JobForm
       title={title}
@@ -271,6 +272,8 @@ return (
       setSearch={setSearch}
       setSearchStatus={setSearchStatus}
       />
+
+      <Dashboard stats={stats}/>
 
     </div>
     <div className="w-full">
