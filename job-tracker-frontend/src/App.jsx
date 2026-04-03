@@ -189,7 +189,7 @@ function App() {
       setTitle("")
       setCompany("")
       setEditingId(null)
-      setStatus("")
+      setStatus("applied")
       fetchJobs()
     }
   }
