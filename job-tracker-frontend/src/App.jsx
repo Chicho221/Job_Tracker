@@ -7,6 +7,7 @@ import SideBar from "./components/Sidebar"
 import JobForm from "./components/JobForm"
 import SearchBar from "./components/SearchBar"
 import Dashboard from "./components/Dashboard"
+import Sort from "./components/Sort"
 
 function App() {
   const [jobs, setJobs] = useState([])
@@ -23,6 +24,7 @@ function App() {
   const [searchstatus, setSearchStatus] = useState("")
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
+  const [sort, setSort] = useState("newest")
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
@@ -54,6 +56,7 @@ function App() {
       setTotal(0)
       setPage(1)
       setStats(0,0,0,0)
+      setSort("newest")
     }
   }, [token])
 
@@ -71,12 +74,12 @@ function App() {
       fetchJobs()
       fetchStats()
     }
-  }, [token, page, limit, search, searchstatus])
+  }, [token, page, limit, search, searchstatus, sort])
 
   //On effects change page number
   useEffect(() => {
     setPage(1)
-  }, [limit, search, searchstatus])
+  }, [limit, search, searchstatus, sort])
 
   //On resize change limit
   useEffect(() => {
@@ -142,7 +145,7 @@ function App() {
 
   //Get all/search jobs function
   const fetchJobs = async () => {
-    const response = await fetch(`http://127.0.0.1:8000/jobs?search=${search}&status=${searchstatus}&skip=${(page-1)*limit}&limit=${limit}`, {
+    const response = await fetch(`http://127.0.0.1:8000/jobs?search=${search}&status=${searchstatus}&skip=${(page-1)*limit}&limit=${limit}&sort=${sort}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -278,6 +281,11 @@ return (
 
     </div>
     <div className="w-full">
+
+      <Sort
+      sort={sort}
+      setSort={setSort}
+      />
 
       <Pagination
         token={token}

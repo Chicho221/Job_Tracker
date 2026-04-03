@@ -83,11 +83,15 @@ def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: in
             )
         )
 
-    ## Sorting by newest/oldest
+    ## Sorting by newest/oldest/company/status
     if sort == "newest":
-        query = query.order_by(JobModel.id.asc())    
+        query = query.order_by(JobModel.id.desc())    
     elif sort == "oldest":
-        query = query.order_by(JobModel.id.desc())
+        query = query.order_by(JobModel.id.asc())
+    elif sort == "company":
+        query = query.order_by(JobModel.company.desc())
+    elif sort == "status":
+        query = query.order_by(JobModel.status.asc())
 
     total = query.count()   
     jobs = query.offset(skip).limit(limit).all()

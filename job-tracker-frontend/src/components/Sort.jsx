@@ -1,15 +1,13 @@
 function Sort ({sort, setSort}){
-    if(sort == "oldest"){
-        return (
-            <button value = "newest" onClick={(e) => setSort(e.target.value)}>Arrow Down</button>
-            
-        )
-    }
-    else if (sort == "newest"){
-        return (
-            <button value = "oldest" onClick={(e) => setSort(e.target.value)}>Arrow Up</button>
-        )
-    }
+    return (
+        <select value={sort} onChange={(e) => {setSort(e.target.value)}}>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="company">Company</option>
+            <option value="status">Status</option>
+        </select>
+        
+    )
 }
 
 export default Sort
