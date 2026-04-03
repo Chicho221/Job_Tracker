@@ -66,7 +66,7 @@ def get_current_user(token : str = Depends(oauth2_scheme), db: Session = Depends
 
 # Search/Get Job
 @app.get("/jobs", response_model = PaginatedJobs)
-def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: int = 5, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: int = 5, sort: str = "newest", current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
     limit = min(limit, 50)
 
     query = db.query(JobModel).filter(JobModel.user_id == current_user.id)
@@ -82,6 +82,13 @@ def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: in
                 JobModel.status.ilike(f"%{search}%")
             )
         )
+
+    ## Sorting by newest/oldest
+    if sort == "newest":
+        query = query.order_by(JobModel.id.asc())    
+    elif sort == "oldest":
+        query = query.order_by(JobModel.id.desc())
+
     total = query.count()   
     jobs = query.offset(skip).limit(limit).all()
                                  
