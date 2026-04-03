@@ -7,7 +7,6 @@ function Dashboard ({stats}) {
         {name: "Interview",value: stats.interview, fill:"oklch(48.8% 0.243 264.376)"},
         {name: "Rejected",value: stats.rejected, fill:"oklch(48.8% 0.243 264.376)"}
     ]
-    console.log(data)
     return(
         <div className="h-3/4 min-w-fit flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
             
