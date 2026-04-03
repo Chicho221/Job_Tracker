@@ -9,9 +9,9 @@ function Dashboard ({stats}) {
     ]
     console.log(data)
     return(
-        <div className="h-3/4 mr-4 flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
+        <div className="h-3/4 min-w-fit flex flex-1 rounded-xl bg-zinc-800/50 shadow-xl">
             
-            <BarChart style={{ width: "100%", hover:"none"}} responsive data={data}>
+            <BarChart style={{ width: "100%", hover:"none"}} data={data}>
                 <XAxis dataKey="name" />
                 <YAxis width="auto" />
                 <Tooltip />

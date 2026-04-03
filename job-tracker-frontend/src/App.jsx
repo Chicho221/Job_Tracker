@@ -253,8 +253,8 @@ return (
     setTotal={setTotal}
   />
 
-  <div className="w-full flex flex-col gap-4">
-    <div className="h-1/3 flex flex-row items-end bg-zinc-900">
+  <div className="w-screen max-w-screen flex flex-col gap-4">
+    <div className="p-4 h-1/3 flex flex-row items-end bg-zinc-900">
 
       <JobForm
       title={title}
