@@ -89,7 +89,7 @@ def search_jobs(status: str, search: str | None = None, skip: int = 0, limit: in
     elif sort == "oldest":
         query = query.order_by(JobModel.id.asc())
     elif sort == "company":
-        query = query.order_by(JobModel.company.desc())
+        query = query.order_by(JobModel.company.asc())
     elif sort == "status":
         query = query.order_by(JobModel.status.asc())
 
