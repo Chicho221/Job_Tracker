@@ -196,6 +196,7 @@ function App() {
       setEditingId(null)
       setStatus("applied")
       fetchJobs()
+      fetchStats()
       setLoading(false)
     }
   }
