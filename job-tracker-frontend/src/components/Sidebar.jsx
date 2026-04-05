@@ -1,7 +1,6 @@
-  
-import profile from "../assets/profile.jpg"
+  import profile from "../assets/profile.jpg"
 
-function SideBar({password, login, setPassword,setNewpassword, newpassword, createUser, token, username, setUsername, setNewusername, newusername, setToken, setJobs, setPage, setTotal }) {
+function SideBar({loading, password, login, setPassword,setNewpassword, newpassword, createUser, token, username, setUsername, setNewusername, newusername, setToken, setJobs, setPage, setTotal }) {
 
     const logout = () => {
         localStorage.removeItem("token")
@@ -22,15 +21,18 @@ function SideBar({password, login, setPassword,setNewpassword, newpassword, crea
                     <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                     <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     
-                    <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
-                    hover:bg-white hover:text-blue-700" onClick={() => {login(),
-                                                                                                        setPassword("")}}>Login</button>
-                    
+                    <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 hover:bg-white hover:text-blue-700 flex justify-center disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95" onClick={() => {login(),setPassword("")}}disabled = {loading}>
+                        {!loading &&("Login")}
+                        {loading &&(<div className="rounded-full w-6 h-6 border-2 border-white border-t-transparent animate-spin"></div>)}
+                    </button>
+        
                     <h2 className="text-2xl font-bold mb-4 font-mono">Register</h2>
                     <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Username" value={newusername} onChange={(e) => setNewusername(e.target.value)} />
                     <input className="bg-white/5 p-2 w-full text-center focus:bg-white/10 focus:outline-none" placeholder="Password" value={newpassword} onChange={(e) => setNewpassword(e.target.value)} />
-                    <h4 className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
-                    hover:bg-white hover:text-blue-700" onClick={createUser}>Register</h4>
+                    <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 hover:bg-white hover:text-blue-700 flex justify-center disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95" onClick={createUser} disabled = {loading}>
+                        {!loading &&("Register")}
+                        {loading &&(<div className=" rounded-full w-6 h-6 border-2 border-white border-t-transparent animate-spin"></div>)}
+                        </button>
                 </div>
             </div>
             
@@ -42,9 +44,10 @@ function SideBar({password, login, setPassword,setNewpassword, newpassword, crea
             <div className= "max-w-40 min-h-[20rem] mx-auto rounded-full object-fill flex flex-col justify-evenly">
                 <img className= "animate-pulse-shadow shadow-blue-700 rounded-full object-cover " src={profile}></img>
                 <h3 className= "overflow-hidden font-semibold cursor-default">{username}</h3>
-                <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 
-                hover:bg-white hover:text-blue-700
-                " onClick={logout}>Logout</button>
+                <button className="transition duration-300 ease-in-out p-2 rounded w-full mb-2 shadow-lg shadow-blue-700/50 bg-blue-700 hover:bg-white hover:text-blue-700 flex justify-center disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95" onClick={logout} disabled = {loading}>
+                {!loading &&("Logout")}
+                {loading &&(<div className=" rounded-full w-6 h-6 border-2 border-white border-t-transparent animate-spin"></div>)}
+                </button>
             </div>
 
             <div className=" border-white border-b-2 my-4 mx-20"></div>

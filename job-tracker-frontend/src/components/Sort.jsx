@@ -1,6 +1,6 @@
-function Sort ({sort, setSort}){
+function Sort ({sort, setSort, token, loading}){
     return (
-        <select value={sort} onChange={(e) => {setSort(e.target.value)}}>
+        <select value={sort} onChange={(e) => {setSort(e.target.value)}} disabled={loading || !token}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="company">Company</option>

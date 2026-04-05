@@ -25,6 +25,7 @@ function App() {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [sort, setSort] = useState("newest")
+  const [loading, setLoading] = useState(false)
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
@@ -119,6 +120,7 @@ function App() {
     alert("Username and password are required!")
     return
     }
+    setLoading(true)
     const response = await fetch("http://127.0.0.1:8000/users", {
       method: "POST",
       headers: {
@@ -139,7 +141,7 @@ function App() {
       }
       return
     }
-
+    setLoading(false)
     alert("User created!")
   }
 
@@ -168,7 +170,6 @@ function App() {
       : "http://127.0.0.1:8000/jobs"
 
     const method = editingId ? "PUT" : "POST"
-
     const response = await fetch(url, {
       method: method,
       headers: {
@@ -186,11 +187,13 @@ function App() {
       return
     }
     if (response.ok) {
+      setLoading(true)
       setTitle("")
       setCompany("")
       setEditingId(null)
       setStatus("applied")
       fetchJobs()
+      setLoading(false)
     }
   }
 
@@ -260,6 +263,7 @@ return (
     <div className="p-4 h-1/3 flex flex-row items-end bg-zinc-900">
 
       <JobForm
+      token={token}
       title={title}
       setTitle={setTitle}
       company={company}
@@ -268,9 +272,11 @@ return (
       setStatus={setStatus}
       editingId={editingId}
       addOrUpdateJob={addOrUpdateJob}
+      loading= {loading}
       />
 
       <SearchBar
+      token={token}
       search={search}
       searchstatus={searchstatus}
       setSearch={setSearch}
@@ -283,6 +289,7 @@ return (
     <div className="w-full">
 
       <Sort
+      token={token}
       sort={sort}
       setSort={setSort}
       />

@@ -1,4 +1,4 @@
-function JobForm({title, setTitle, company, setCompany, status, setStatus, editingId, addOrUpdateJob}){
+function JobForm({title, setTitle, company, setCompany, status, setStatus, editingId, addOrUpdateJob, loading, token}){
 return(
 
     <div className="w-1/3 min-w-fit flex flex-col justify-end">
@@ -10,10 +10,10 @@ return(
         <div className="flex w-full">
 
             <div className="flex flex-col w-full mr-2">
-                <input className="p-2 rounded bg-zinc-800 focus:bg-white/5 focus:outline-none" type="text"  placeholder = "Job Title" value = {title} onChange = {(e) => setTitle(e.target.value)}/>
-                <input className="p-2 rounded my-2 bg-zinc-800 focus:bg-white/5 focus:outline-none" type="text" placeholder = "Company Name" value = {company} onChange = {(e) => setCompany(e.target.value)}/>
+                <input className="p-2 rounded bg-zinc-800 focus:bg-white/5 focus:outline-none" type="text"  placeholder = "Job Title" value = {title} onChange = {(e) => setTitle(e.target.value)} disabled={!token}/>
+                <input className="p-2 rounded my-2 bg-zinc-800 focus:bg-white/5 focus:outline-none" type="text" placeholder = "Company Name" value = {company} onChange = {(e) => setCompany(e.target.value)} disabled={!token}/>
                 
-                <select className="p-2 rounded bg-zinc-800 outline outline-none " name="status" id="status" value = {status} onChange = {(e) => setStatus(e.target.value)}>
+                <select className="p-2 rounded bg-zinc-800 outline outline-none " name="status" id="status" value = {status} onChange = {(e) => setStatus(e.target.value)}  disabled={!token}>
                 <option value="applied">Applied</option>
                 <option value="rejected">Rejected</option>
                 <option value="interview">Interview</option>
@@ -21,8 +21,15 @@ return(
             </div>
                 
             <div className="flex pr-4 border-r-2">
-                {editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white/5 hover:bg-white" onClick={addOrUpdateJob}>Update Job</button>)}
-                {!editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white hover:text-blue-700" onClick={addOrUpdateJob}>Create Job</button>)}
+                {editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded  bg-blue-700 hover:bg-white hover:text-blue-700 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95" onClick={addOrUpdateJob} disabled={loading || !token}>
+                {!loading &&("Update Job")}
+                {loading &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
+                </button>)}
+
+                {!editingId &&(<button className="fles-1 transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white hover:text-blue-700 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95 disabled:hover:text-white" onClick={addOrUpdateJob} disabled={loading || !token}>
+                {!loading &&("Create Job")}
+                {loading &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
+                </button>)}
             </div>
 
         </div>
