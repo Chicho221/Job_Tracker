@@ -168,14 +168,14 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         "username": db_user.username,
     }
 
-# Deletes User
-@app.delete("/users/{id}", status_code=204)
-def delete_user(id: int, db: Session = Depends(get_db)):
-    db_user = db.query(UserModel).filter(UserModel.id == id).first()
+# Deletes current User
+@app.delete("/users/current", status_code=204)
+def delete_user(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_user = db.query(UserModel).filter(UserModel.id == current_user.id).first()
 
     if not db_user:
         raise HTTPException(status_code = 404, detail = "User not found.")
-    
+
     db.delete(db_user)
     db.commit()
     return None

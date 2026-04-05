@@ -222,6 +222,21 @@ function App() {
       }
   }
 
+  //Delete user function
+
+  const deleteUser = async() => {
+    const response = await fetch(`http://127.0.0.1:8000/users/current`,{
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+      if (!response.ok) {
+        alert("Delete user Failed!")
+        return
+      }
+  }
+
   //Fetch stats function
   const fetchStats = async() => {
     const response = await fetch("http://127.0.0.1:8000/jobs/stats", {
@@ -243,6 +258,7 @@ return (
   
   <SideBar
     token={token}
+    deleteUser={deleteUser}
     setToken={setToken}
     createUser={createUser}
     login={login}

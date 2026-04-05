@@ -1,7 +1,6 @@
   import profile from "../assets/profile.jpg"
 
-function SideBar({loading, password, login, setPassword,setNewpassword, newpassword, createUser, token, username, setUsername, setNewusername, newusername, setToken, setJobs, setPage, setTotal }) {
-
+function SideBar({deleteUser ,loading, password, login, setPassword,setNewpassword, newpassword, createUser, token, username, setUsername, setNewusername, newusername, setToken, setJobs, setPage, setTotal }) {
     const logout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("username")
@@ -62,7 +61,7 @@ function SideBar({loading, password, login, setPassword,setNewpassword, newpassw
             </div>
             <button className="flex flex-col rounded-full p-2 mt-auto mb-4 mx-4 bg-red-800
             transition duration-100 active:scale-95 hover:bg-white hover:text-red-800
-            disabled:bg-zinc-700" disabled = {loading}>Delete Account</button>
+            disabled:bg-zinc-700" onClick={() => (deleteUser(), logout())} disabled = {loading}>Delete Account</button>
         </div>
     )}
 
