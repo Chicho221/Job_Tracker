@@ -1,12 +1,14 @@
 from database import Base
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 
 class JobModel(Base):
     __tablename__ = 'jobs'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("UserModel", back_populates="jobs")
     title = Column(String, index=True)
     company = Column(String, index=True)
     status = Column(String, index=True)
@@ -21,3 +23,4 @@ class UserModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True)
     password_hash = Column(String)
+    jobs = relationship("JobModel", back_populates="user", cascade = "all, delete")

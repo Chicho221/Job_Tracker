@@ -139,8 +139,11 @@ function App() {
       }else {
         alert(errorData.detail || "Registration failed!")
       }
+      setLoading(false)
       return
     }
+    setNewusername("")
+    setNewpassword("")
     setLoading(false)
     alert("User created!")
   }
@@ -223,8 +226,12 @@ function App() {
   }
 
   //Delete user function
-
   const deleteUser = async() => {
+
+    if (!window.confirm("Are you sure you want to delete your account?")) {
+    return
+    }
+
     const response = await fetch(`http://127.0.0.1:8000/users/current`,{
       method: "DELETE",
       headers: {

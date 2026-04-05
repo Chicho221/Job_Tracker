@@ -168,11 +168,11 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         "username": db_user.username,
     }
 
-# Deletes current User
+# Deletes current user and all jobs that belong to him
 @app.delete("/users/current", status_code=204)
-def delete_user(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+def delete_user(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)): 
     db_user = db.query(UserModel).filter(UserModel.id == current_user.id).first()
-
+    
     if not db_user:
         raise HTTPException(status_code = 404, detail = "User not found.")
 
