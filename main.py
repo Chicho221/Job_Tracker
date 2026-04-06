@@ -9,15 +9,15 @@ from models import JobModel, UserModel
 from schemas import JobCreate, JobStatus, Job, UserCreate, User, PaginatedJobs
 from jose import jwt, JWTError
 from fastapi.middleware.cors import CORSMiddleware
+origins = [
+    "http://localhost:5173",
+    "https://job-tracker-front.onrender.com"
+]
 SECRET_KEY = "secret_something"
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:5173",
-    "https://job-tracker-fk2o.onrender.com",
-    "http://127.0.0.1:5173"
-]
+
 
 app.add_middleware(
     CORSMiddleware,
