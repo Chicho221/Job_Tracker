@@ -13,9 +13,14 @@ SECRET_KEY = "secret_something"
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:5173",
+    "https://job-tracker-fk2o.onrender.com"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all (for now)
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
