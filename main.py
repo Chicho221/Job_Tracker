@@ -15,7 +15,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:5173",
-    "https://job-tracker-fk2o.onrender.com"
+    "https://job-tracker-fk2o.onrender.com",
+    "http://127.0.0.1:5173"
 ]
 
 app.add_middleware(
