@@ -8,6 +8,7 @@ import JobForm from "./components/JobForm"
 import SearchBar from "./components/SearchBar"
 import Dashboard from "./components/Dashboard"
 import Sort from "./components/Sort"
+import API_BASE from "./api"
 
 function App() {
   const [jobs, setJobs] = useState([])
@@ -98,7 +99,7 @@ function App() {
     const formData = new URLSearchParams()
     formData.append("username", username)
     formData.append("password", password)
-    const response = await fetch("http://127.0.0.1:8000/login",{
+    const response = await fetch(`${API_BASE}/login`,{
       method: "POST",
       body: formData
     })
@@ -121,7 +122,7 @@ function App() {
     return
     }
     setLoading(true)
-    const response = await fetch("http://127.0.0.1:8000/users", {
+    const response = await fetch(`${API_BASE}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -150,7 +151,7 @@ function App() {
 
   //Get all/search jobs function
   const fetchJobs = async () => {
-    const response = await fetch(`http://127.0.0.1:8000/jobs?search=${search}&status=${searchstatus}&skip=${(page-1)*limit}&limit=${limit}&sort=${sort}`, {
+    const response = await fetch(`${API_BASE}/jobs?search=${search}&status=${searchstatus}&skip=${(page-1)*limit}&limit=${limit}&sort=${sort}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -169,8 +170,8 @@ function App() {
   //Add new or update job function
   const addOrUpdateJob = async () => {
     const url = editingId
-      ? `http://127.0.0.1:8000/jobs/${editingId}`
-      : "http://127.0.0.1:8000/jobs"
+      ? `${API_BASE}/jobs/${editingId}`
+      : `${API_BASE}/jobs`
 
     const method = editingId ? "PUT" : "POST"
     const response = await fetch(url, {
@@ -210,7 +211,7 @@ function App() {
   
   //Delete function
   const deleteJob = async(id) => {
-    const response = await fetch(`http://127.0.0.1:8000/jobs/${id}`, {
+    const response = await fetch(`${API_BASE}/jobs/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -233,7 +234,7 @@ function App() {
     return
     }
 
-    const response = await fetch(`http://127.0.0.1:8000/users/current`,{
+    const response = await fetch(`${API_BASE}/users/current`,{
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -247,7 +248,7 @@ function App() {
 
   //Fetch stats function
   const fetchStats = async() => {
-    const response = await fetch("http://127.0.0.1:8000/jobs/stats", {
+    const response = await fetch(`${API_BASE}/jobs/stats`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
