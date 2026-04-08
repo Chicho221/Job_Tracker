@@ -26,7 +26,14 @@ function App() {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [sort, setSort] = useState("newest")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState({
+    login: false,
+    register: false,
+    create_job: false,
+    delete_user: false,
+    logout: false,
+    add_update_job: false
+  })
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
@@ -51,6 +58,7 @@ function App() {
       setToken(savedToken)
     }
   },[])
+
   //Clear on token loss
   useEffect(() => {
     if (!token) {
@@ -94,16 +102,28 @@ function App() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  //Change loading state
+  function updateLoading(state, value) {
+  setLoading(prevLoading => ({
+    ...prevLoading,
+    [state]: value
+  }));
+  }
+
   //Login function
   const login = async () => {
+    updateLoading("login", true)
+    
     const formData = new URLSearchParams()
     formData.append("username", username)
     formData.append("password", password)
+    
     const response = await fetch(`${API_BASE}/login`,{
       method: "POST",
       body: formData
     })
     if (!response.ok) {
+      updateLoading("login", false)
       alert("Login Failed!")
       return
     }
@@ -112,16 +132,21 @@ function App() {
     setToken(data.access_token)
     localStorage.setItem("token", data.access_token)
     localStorage.setItem("username", username)
+    updateLoading("login", false)
     }
+    
   }
 
   //Create new user
   const createUser = async () => {
+    updateLoading("register", true)
+
     if (!newusername || !newpassword) {
     alert("Username and password are required!")
+      updateLoading("register", false)
     return
     }
-    setLoading(true)
+
     const response = await fetch(`${API_BASE}/users`, {
       method: "POST",
       headers: {
@@ -137,15 +162,17 @@ function App() {
       const errorData = await response.json()
       if(Array.isArray(errorData.detail)) {
         alert(errorData.detail.map(e => e.msg).join(", "))
+        updateLoading("register", false)
       }else {
         alert(errorData.detail || "Registration failed!")
+        updateLoading("register", false)
       }
-      setLoading(false)
+      updateLoading("register", false)
       return
     }
     setNewusername("")
     setNewpassword("")
-    setLoading(false)
+    updateLoading("register", false)
     alert("User created!")
   }
 
@@ -186,19 +213,20 @@ function App() {
         status: status
       })
     })
+    updateLoading("add_update_job", true)
     if (!response.ok) {
       alert("Create/Update Failed!")
+      updateLoading("add_update_job", false)
       return
     }
     if (response.ok) {
-      setLoading(true)
       setTitle("")
       setCompany("")
       setEditingId(null)
       setStatus("applied")
       fetchJobs()
       fetchStats()
-      setLoading(false)
+      updateLoading("add_update_job", false)
     }
   }
 
@@ -229,9 +257,11 @@ function App() {
 
   //Delete user function
   const deleteUser = async() => {
+    updateLoading("delete_user", true)    
 
     if (!window.confirm("Are you sure you want to delete your account?")) {
-    return
+      updateLoading("delete_user", false)
+    return false
     }
 
     const response = await fetch(`${API_BASE}/users/current`,{
@@ -242,7 +272,13 @@ function App() {
     })
       if (!response.ok) {
         alert("Delete user Failed!")
-        return
+        updateLoading("delete_user", false)
+        console.log(loading.delete_user)
+        return false
+      }
+      if (response.ok) {
+        updateLoading("delete_user", false)
+        return true
       }
   }
 
@@ -282,6 +318,7 @@ return (
     setJobs={setJobs}
     setPage={setPage}
     setTotal={setTotal}
+    loading={loading}
   />
 
   <div className="w-screen max-w-screen flex flex-col gap-4">

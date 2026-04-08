@@ -1,4 +1,7 @@
 function JobForm({title, setTitle, company, setCompany, status, setStatus, editingId, addOrUpdateJob, loading, token}){
+    const state = {
+        create_load: loading.add_update_job
+    }
 return(
 
     <div className="w-1/3 min-w-fit flex flex-col justify-end">
@@ -21,14 +24,14 @@ return(
             </div>
                 
             <div className="flex pr-4 border-r-2">
-                {editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded  bg-blue-700 hover:bg-white hover:text-blue-700 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95" onClick={addOrUpdateJob} disabled={loading || !token}>
-                {!loading &&("Update Job")}
-                {loading &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
+                {editingId &&(<button className="transition duration-300 ease-in-out px-6 py-2 rounded  bg-blue-700 hover:scale-105 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 disabled:scale-100 active:scale-95" onClick={addOrUpdateJob} disabled={state.create_load || !token}>
+                {!state.create_load &&("Update Job")}
+                {state.create_load &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
                 </button>)}
 
-                {!editingId &&(<button className="fles-1 transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:bg-white hover:text-blue-700 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 active:scale-95 disabled:hover:text-white" onClick={addOrUpdateJob} disabled={loading || !token}>
-                {!loading &&("Create Job")}
-                {loading &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
+                {!editingId &&(<button className="fles-1 transition duration-300 ease-in-out px-6 py-2 rounded bg-blue-700 hover:scale-105 disabled:bg-zinc-700 disabled:shadow-l disabled:shadow-zinc-700 disabled:scale-100 active:scale-95 disabled:hover:text-white" onClick={addOrUpdateJob} disabled={state.create_load || !token}>
+                {!state.create_load &&("Create Job")}
+                {state.create_load &&(<div className="rounded-full w-8 h-8 border-2 border-white border-t-transparent animate-spin"></div>)}
                 </button>)}
             </div>
 
