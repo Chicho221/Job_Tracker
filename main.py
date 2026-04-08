@@ -13,6 +13,7 @@ origins = [
     "http://localhost:5173",
     "https://job-tracker-front.onrender.com"
 ]
+
 SECRET_KEY = "secret_something"
 
 app = FastAPI()

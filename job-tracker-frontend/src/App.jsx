@@ -47,7 +47,7 @@ function App() {
 
     if (width < 640) return 5       // Mobile
     if (width < 1024) return 8      // Tablet
-    return 9                       // Desktop
+    return 8                       // Desktop
   }
   const [limit, setLimit] = useState(getLimit())
   
@@ -321,7 +321,7 @@ return (
     loading={loading}
   />
 
-  <div className="w-screen max-w-screen flex flex-col gap-4">
+  <div className="w-screen max-w-screen flex flex-col">
     <div className="p-4 h-1/3 flex flex-row items-end bg-zinc-900">
 
       <JobForm
@@ -348,7 +348,7 @@ return (
       <Dashboard stats={stats}/>
 
     </div>
-    <div className="w-full">
+    <div className="flex-auto w-full bg-zinc-800">
 
       <Sort
       token={token}
@@ -365,6 +365,7 @@ return (
       />
 
       <JobList
+        token={token}
         jobs={jobs}
         editingId={editingId}
         startEdit={startEdit}

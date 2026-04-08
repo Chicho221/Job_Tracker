@@ -1,32 +1,44 @@
-function JobList({ jobs, editingId, startEdit, deleteJob, setEditingId, setTitle, setCompany, setStatus }) {
+function JobList({token, jobs, editingId, startEdit, deleteJob, setEditingId, setTitle, setCompany, setStatus }) {
+    if(token){
     return (
-      <ul className="m-4 grid gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+      
+      <div>
+        <div className="grid grid-cols-5 w-full h-50 bg-zinc-900 p-2 mx-2 rounded-t-xl border-b border-zinc-700">
+          <p className="cursor-default">Title</p>
+          <p className="cursor-default">Company</p>
+          <p className="cursor-default">Status</p>
+          <p className="cursor-default">Added</p>
+        </div>
+        <ul className="max-h-50 grid gap-2 grid-rows-8 bg-zinc-900 p-2 mx-2 mb-2 rounded-b-xl">
+        
         {jobs.map((job) => (
-        <li key={job.id} className="bg-zinc-900 rounded p-4 hover:bg-white/10">
+        <li key={job.id} className=" bg-zinc-700/10 rounded-full py-2 px-4 hover:bg-white/10 w-full">
 
-        <div className="flex justify-between items-center">
-          <div className="w-2/3 flex flex-col items-start overflow-hidden">
-            <p title={job.title} className="cursor-default text-xl">{job.title}</p>
+        <div className="grid grid-cols-5 w-full items-center">
+          
+            <p title={job.title} className="text-start cursor-default text-lg">{job.title}</p>
             <p className="cursor-default text-base ">{job.company}</p>
-            <p className="cursor-default text-sm mt-1">Status: {job.status}</p>  
-          </div>
-          <div className="flex flex-col items-end w-1/3 space-y-2">
+            <p className="cursor-default text-sm mt-1">{job.status}</p>  
+            <p className="cursor-default text-sm mt-1">{job.status}</p> 
+          
+          <div className="flex flex-row items-center gap-2">
             <div className="flex flex-row w-full justify-end space-x-2">
-              {!editingId &&(<button className="transition  bg-zinc-800 px-2 py-1 rounded hover:bg-white/10" onClick={() => startEdit(job)}>Edit</button>)}
+              {!editingId && (<button className="transition  bg-zinc-800 px-2 py-1 rounded hover:bg-white/10" onClick={() => startEdit(job)}>Edit</button>)}
               {editingId && (<button className="bg-zinc-800 px-2 py-1 rounded hover:bg-white/10" onClick={() => {setEditingId(null)
                                                                                                                       setTitle("")
                                                                                                                       setCompany("")
                                                                                                                       setStatus("")}}>Cancel</button>)}
             </div>
-            <div className="bg-red-900 px-2 py-1 rounded min-w-1/2">
-              <button onClick={() => deleteJob(job.id)}>Delete</button>
+            <div className="bg-red-900 h-5 w-5 text-center rounded-full">
+              <button onClick={() => deleteJob(job.id)}></button>
             </div>
           </div>  
         </div>
         </li>
           ))}
         </ul>
-    )
+      </div>    
+    )}
 }
 
 export default JobList

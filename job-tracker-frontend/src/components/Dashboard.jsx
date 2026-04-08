@@ -1,4 +1,4 @@
-import {PieChart, Pie, BarChart, XAxis, YAxis, Tooltip, Bar, LabelList, ResponsiveContainer } from "recharts"
+import {PieChart, Pie, BarChart, XAxis, YAxis, Tooltip, Bar, LabelList} from "recharts"
 
 function Dashboard ({stats}) {
     const barData = [
