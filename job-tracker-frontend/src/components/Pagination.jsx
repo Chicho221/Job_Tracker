@@ -13,7 +13,7 @@ function Pagination({ token, page, total, limit, setPage }) {
     return(
         <div className="mt-2 flex flex-row items-center justify-center">
           <button 
-            className="transition duration-300 ease-in-out bg-blue-700 px-3 py-1 rounded-xl disabled:bg-white/5 disabled:text-white active:scale-95" 
+            className="transition duration-100 ease-in-out bg-blue-700 px-3 py-1 rounded-xl disabled:bg-white/5 disabled:text-white active:scale-95" 
             onClick={() => setPage(prev => Math.max(prev-1, 1))} 
             disabled={page === 1}>
               <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@ function Pagination({ token, page, total, limit, setPage }) {
           <span className="hover:cursor-default text-sm mx-2">Page {page} of {totalPages}</span>
 
           <button 
-            className="transition duration-300 ease-in-out bg-blue-700 px-3 py-1 rounded-xl disabled:bg-white/5 disabled:text-white active:scale-95"
+            className="transition duration-100 ease-in-out bg-blue-700 px-3 py-1 rounded-xl disabled:bg-white/5 disabled:text-white active:scale-95"
             onClick={() => setPage(prev => Math.min(prev + 1, totalPages))} 
             disabled={page === totalPages}> 
               <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
