@@ -4,7 +4,7 @@ function JobList({token, jobs, editingId, startEdit, deleteJob, setEditingId, se
       
       <div>
 
-        <div className="grid grid-cols-5 h-50 bg-zinc-900 py-2 px-6 mx-2 rounded-t-xl border-b-2 border-zinc-800">
+        <div className="grid grid-cols-5 h-50 bg-zinc-900 py-2 px-6 mx-2 rounded-t-xl border-b-2 border-zinc-800 space-x-4">
           <p className="cursor-default">Title</p>
           <p className="cursor-default">Company</p>
           <p className="cursor-default">Status</p>
@@ -15,10 +15,10 @@ function JobList({token, jobs, editingId, startEdit, deleteJob, setEditingId, se
           {jobs.map((job) => (
           <li key={job.id} className=" bg-zinc-700/10 rounded-full px-4 py-2 transition hover:bg-white/10 w-full">
 
-            <div className="grid grid-cols-5 items-center text-base font-mono">
+            <div className="grid grid-cols-5 items-center text-base font-mono space-x-4">
               
-                <p title={job.title} className="text-start cursor-default">{job.title}</p>
-                <p className="cursor-default">{job.company}</p>
+                <p title={job.title} className="text-start cursor-default overflow-hidden">{job.title}</p>
+                <p className="cursor-default  overflow-hidden">{job.company}</p>
                 <p className="cursor-default mt-1">{job.status}</p>  
                 <p className="cursor-default mt-1">{job.created_at}</p> 
               
