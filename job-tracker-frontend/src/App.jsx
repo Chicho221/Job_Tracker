@@ -349,21 +349,21 @@ return (
 
     </div>
     <div className="flex-auto w-full bg-zinc-800">
-
-      <Sort
-      token={token}
-      sort={sort}
-      setSort={setSort}
-      />
-
-      <Pagination
+      <div className="grid grid-cols-3 p-2">
+        <Sort
         token={token}
-        page={page}
-        total={total}
-        limit={limit}
-        setPage={setPage}
-      />
+        sort={sort}
+        setSort={setSort}
+        />
 
+        <Pagination
+          token={token}
+          page={page}
+          total={total}
+          limit={limit}
+          setPage={setPage}
+        />
+      </div>
       <JobList
         token={token}
         jobs={jobs}
