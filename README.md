@@ -1,19 +1,30 @@
-Job Tracker
+# Job Tracker App
 
-What it is?
+Full-stack job tracking system built with:
 
-It's a Job Tracker API with authentication and user-based job management.
-
-Tech stack:
-
-- Python
 - FastAPI
 - SQLAlchemy
-- SQLite
-- JWT
+- JWT Authentication
+- React + Vite
+- Recharts Dashboard
+- Deployed on Render
 
-How to run:
+## Features
 
-`uvicorn main:app --reload`
+- User authentication
+- CRUD job tracking
+- Search & sorting
+- Dashboard statistics
+- Pagination
+- Account deletion
 
-<img width="1547" height="764" alt="image" src="https://github.com/user-attachments/assets/bf455106-e948-4730-9278-5555818b98a4" />
+## Preview
+<img width="1869" height="1001" alt="image" src="https://github.com/user-attachments/assets/ac397296-7735-42b8-8f40-bbbdedea14f0" />
+
+## Live Demo
+
+Frontend:
+https://job-tracker-front.onrender.com
+
+Backend:
+https://job-tracker-fk2o.onrender.com
